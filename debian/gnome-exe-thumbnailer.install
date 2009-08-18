@@ -1,0 +1,3 @@
+gnome-exe-thumbnailer-template* /usr/share/pixmaps
+gnome-exe-thumbnailer.sh /usr/bin
+gnome-exe-thumbnailer.schemas /usr/share/gconf/schemas

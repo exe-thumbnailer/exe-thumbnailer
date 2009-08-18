@@ -1,0 +1,29 @@
+<gconfschemafile>
+    <schemalist>
+
+        <schema>
+            <key>/schemas/desktop/gnome/thumbnailers/application@x-ms-dos-executable/enable</key>
+            <applyto>/desktop/gnome/thumbnailers/application@x-ms-dos-executable/enable</applyto>
+            <owner>gnome-exe-thumbnailer</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Enable thumbnailing of application/x-ms-dos-executable files</short>
+                <long>Enable thumbnailing of application/x-ms-dos-executable files</long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/desktop/gnome/thumbnailers/application@x-ms-dos-executable/command</key>
+            <applyto>/desktop/gnome/thumbnailers/application@x-ms-dos-executable/command</applyto>
+            <owner>gnome-exe-thumbnailer</owner>
+            <type>string</type>
+            <default>/usr/bin/gnome-exe-thumbnailer.sh %u %o</default>
+            <locale name="C">
+		    <short>Command that creates a thumbnail</short>
+		    <long>Command that creates a thumbnail (%o) for a GNOME VFS URL (%u)</long>
+            </locale>
+        </schema>
+
+    </schemalist>
+</gconfschemafile>

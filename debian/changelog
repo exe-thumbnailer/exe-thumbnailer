@@ -1,0 +1,5 @@
+gnome-exe-thumbnailer (0.1) karmic; urgency=low
+
+  * Initial Release.  First version only has a template for Wine.
+
+ -- Scott Ritchie <scottritchie@ubuntu.com>  Tue, 18 Aug 2009 02:33:41 -0700

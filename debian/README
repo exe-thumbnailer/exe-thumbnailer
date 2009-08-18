@@ -1,0 +1,12 @@
+The Debian Package gnome-exe-thumbnailer
+----------------------------
+
+This package was made based on an idea first seen in Ubuntu Brainstorm.  It was
+then written as part of the Karmic-Wine-Integration spec for Ubuntu:
+https://wiki.ubuntu.com/karmic-wine-integration
+
+It is my hope that this can be merged upstream and become a part of a default
+Gnome desktop, as I feel it adds a lot of usability even when you don't have
+Wine installed.
+
+ -- Scott Ritchie <scottritchie@ubuntu.com>  Tue, 18 Aug 2009 02:33:41 -0700
