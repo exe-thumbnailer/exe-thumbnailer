@@ -1,3 +1,10 @@
+gnome-exe-thumbnailer (0.2) karmic; urgency=low
+
+  * Decode the url-encoded filename passed to wrestool so it actually works
+  * Depend on python for the above
+
+ -- Scott Ritchie <scottritchie@ubuntu.com>  Tue, 20 Oct 2009 03:38:25 -0700
+
 gnome-exe-thumbnailer (0.1) karmic; urgency=low
 
   * Initial Release.  First version only has a template for Wine.

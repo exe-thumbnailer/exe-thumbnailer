@@ -8,7 +8,7 @@ Standards-Version: 3.8.1
 
 Package: gnome-exe-thumbnailer
 Architecture: all
-Depends: ${misc:Depends}, icoutils, imagemagick
+Depends: ${misc:Depends}, icoutils, imagemagick, python
 Description: Wine .exe and other executable thumbnailer for Gnome
  gnome-exe-thumbnailer is a thumbnailer for Gnome that will give Windows .exe
  files an icon based on their embedded icon and a generic "Wine program" icon.

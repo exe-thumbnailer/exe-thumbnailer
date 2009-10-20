@@ -1,8 +1,9 @@
 #!/bin/bash
 
 f=`mktemp`
+deurledfile=`python -c 'import sys, urlparse, urllib; print urllib.unquote(urlparse.urlparse(sys.argv[1]).path)' $1`
 
-if wrestool "$1" -x -t14 > $f && [ -s $f ]; then
+if wrestool "$deurledfile" -x -t14 > $f && [ -s $f ]; then
 	id=$(icotool -l $f | awk '{
 		ci=int(substr($2,index($2,"=")+1));
 		cw=int(substr($3,index($3,"=")+1));
