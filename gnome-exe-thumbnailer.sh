@@ -1,13 +1,14 @@
 #!/bin/bash
 
-TEMPFILE=$(mktemp)
+TEMPFILE1=$(mktemp)
+TEMPFILE2=$(mktemp)
 TEMPTHUMB=$(mktemp)
 DEURLEDFILE=$(python -c 'import sys, urlparse, urllib; print urllib.unquote(urlparse.urlparse(sys.argv[1]).path)' $1)
 
-if wrestool --extract --type=group_icon "$DEURLEDFILE" > $TEMPFILE && [ -s $TEMPFILE ]
+if wrestool --extract --type=group_icon "$DEURLEDFILE" > $TEMPFILE1 && [ -s $TEMPFILE1 ]
 then
 	read INDEX OFFSET < <(
-		icotool --list $TEMPFILE | awk '{
+		icotool --list $TEMPFILE1 | awk '{
 			ci=int(substr($2,index($2,"=") + 1));
 			cw=int(substr($3,index($3,"=") + 1));
 			cb=int(substr($5,index($5,"=") + 1));
@@ -23,17 +24,17 @@ then
 		}'
 	)
 
-	icotool --extract --index=$INDEX $TEMPFILE -o $TEMPFILE
-	composite -geometry +$OFFSET+$OFFSET $TEMPFILE /usr/share/pixmaps/gnome-exe-thumbnailer-template.png $TEMPTHUMB
+	icotool --extract --index=$INDEX $TEMPFILE1 -o $TEMPFILE2
+	composite -geometry +$OFFSET+$OFFSET $TEMPFILE2 /usr/share/pixmaps/gnome-exe-thumbnailer-template.png $TEMPTHUMB
 
 else
 	grep -i "\.exe$" <<< "$DEURLEDFILE" && EXT="-x"
 	cp /usr/share/pixmaps/gnome-exe-thumbnailer-generic${EXT}.png $TEMPTHUMB
 fi
 
-if wrestool --extract --raw --type=version "$DEURLEDFILE" > $TEMPFILE && [ -s $TEMPFILE ]
+if wrestool --extract --raw --type=version "$DEURLEDFILE" > $TEMPFILE1 && [ -s $TEMPFILE1 ]
 then
-	VERSION=$(cat $TEMPFILE \
+	VERSION=$(cat $TEMPFILE1 \
 		| tr '\0' '\t' \
 		| sed 's/\t\t/#/g' \
 		| tr -c -d '[:print:]' \
@@ -45,11 +46,12 @@ then
 
 	if [ "$VERSION" ]
 	then
-		convert -font Helvetica-Bold -pointsize 7 -background '#00001090' -fill white label:" $VERSION " miff:- | \
+		convert -font fixed -pointsize 8 -background '#00001090' -fill white label:" $VERSION " miff:- | \
 		composite -gravity southeast -geometry +1+3 - $TEMPTHUMB $2
 	fi
 else
 	cp $TEMPTHUMB $2
 fi
 
-rm $TEMPFILE $TEMPTHUMB
+rm  $TEMPFILE1 $TEMPFILE2 $TEMPTHUMB
+
