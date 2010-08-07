@@ -46,7 +46,9 @@ then
 
 	if [ "$VERSION" ]
 	then
-		convert -font fixed -pointsize 8 -background '#00001090' -fill white label:" $VERSION " miff:- | \
+		convert -font -*-clean-medium-r-*-*-6-*-*-*-*-*-*-* -interline-spacing 1 \
+		-background transparent -fill white -bordercolor '#00001090' \
+		-border 1x0 -shave 0x1 label:"$VERSION" miff:- | \
 		composite -gravity southeast -geometry +1+3 - $TEMPTHUMB $2
 	fi
 else

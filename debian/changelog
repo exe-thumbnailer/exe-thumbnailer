@@ -1,3 +1,15 @@
+gnome-exe-thumbnailer (0.5-0ubuntu1) maverick; urgency=low
+
+  * New font with easier readability (LP: #604391)
+
+ -- Scott Ritchie <scottritchie@ubuntu.com>  Sat, 07 Aug 2010 23:49:29 -0700
+
+gnome-exe-thumbnailer (0.5-0ubuntu1~lucidppa1) lucid; urgency=low
+
+  * New font with easier readability (LP: #604391)
+
+ -- Scott Ritchie <scottritchie@ubuntu.com>  Sat, 07 Aug 2010 22:28:19 -0700
+
 gnome-exe-thumbnailer (0.4-0ubuntu1) maverick; urgency=low
 
   * Port PPA changes to maverick
