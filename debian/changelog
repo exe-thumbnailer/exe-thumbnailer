@@ -1,3 +1,14 @@
+gnome-exe-thumbnailer (0.6-0ubuntu1) maverick; urgency=low
+
+  * New version (thanks Jan Nekvasil)
+    - use of %i (local file with full path) instead of %u
+    - avoid dependency on python
+    - only thumbnail local files (LP: #602767)
+    - better version number extraction pipeline (LP: #622295)
+    - enhanced text positioning with rounded corners in version labels
+
+ -- Scott Ritchie <scottritchie@ubuntu.com>  Fri, 17 Sep 2010 02:04:27 -0700
+
 gnome-exe-thumbnailer (0.5-0ubuntu1) maverick; urgency=low
 
   * New font with easier readability (LP: #604391)

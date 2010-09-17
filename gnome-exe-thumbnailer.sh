@@ -3,9 +3,9 @@
 TEMPFILE1=$(mktemp)
 TEMPFILE2=$(mktemp)
 TEMPTHUMB=$(mktemp)
-DEURLEDFILE=$(python -c 'import sys, urlparse, urllib; print urllib.unquote(urlparse.urlparse(sys.argv[1]).path)' $1)
+INPUTFILE="$1"
 
-if wrestool --extract --type=group_icon "$DEURLEDFILE" > $TEMPFILE1 && [ -s $TEMPFILE1 ]
+if wrestool --extract --type=group_icon "$INPUTFILE" > $TEMPFILE1 && [ -s $TEMPFILE1 ]
 then
 	read INDEX OFFSET < <(
 		icotool --list $TEMPFILE1 | awk '{
@@ -28,32 +28,32 @@ then
 	composite -geometry +$OFFSET+$OFFSET $TEMPFILE2 /usr/share/pixmaps/gnome-exe-thumbnailer-template.png $TEMPTHUMB
 
 else
-	grep -i "\.exe$" <<< "$DEURLEDFILE" && EXT="-x"
+	grep -i "\.exe$" <<< "$INPUTFILE" && EXT="-x"
 	cp /usr/share/pixmaps/gnome-exe-thumbnailer-generic${EXT}.png $TEMPTHUMB
 fi
 
-if wrestool --extract --raw --type=version "$DEURLEDFILE" > $TEMPFILE1 && [ -s $TEMPFILE1 ]
+if wrestool --extract --raw --type=version "$INPUTFILE" > $TEMPFILE1 && [ -s $TEMPFILE1 ]
 then
-	VERSION=$(cat $TEMPFILE1 \
-		| tr '\0' '\t' \
-		| sed 's/\t\t/#/g' \
+	VERSION=$(< $TEMPFILE1 \
+		tr '\0, ' '\t.\0' \
+		| sed 's/\t\t/_/g' \
 		| tr -c -d '[:print:]' \
-		| sed -r 's/.*Version#*([^#]*).*/\1/; s/, /./g;' \
-		| xargs echo \
-		| sed -r 's/^([0-9]*\.[0-9]*\.[0-9]).*/\1/' \
-		| sed 's/.* //'
+		| sed -r 's/.*Version[^0-9]*([0-9\.]*).*/\1/; s/([0-9]*\.[0-9]*\.[0-9][0-9]?).*/\1/; s/\.$//'
 	)
 
 	if [ "$VERSION" ]
 	then
-		convert -font -*-clean-medium-r-*-*-6-*-*-*-*-*-*-* -interline-spacing 1 \
-		-background transparent -fill white -bordercolor '#00001090' \
-		-border 1x0 -shave 0x1 label:"$VERSION" miff:- | \
-		composite -gravity southeast -geometry +1+3 - $TEMPTHUMB $2
+		convert -font -*-clean-medium-r-*-*-6-*-*-*-*-*-*-* \
+		-background transparent -fill white label:"$VERSION" \
+		-trim -bordercolor '#00001090' -border 2 \
+		-fill '#00001048' \
+		-draw $'color 0,0 point\ncolor 0,8 point' -flop \
+		-draw $'color 0,0 point\ncolor 0,8 point' -flop \
+		miff:- | composite -gravity southeast -geometry +1+3 - $TEMPTHUMB $2
 	fi
 else
 	cp $TEMPTHUMB $2
 fi
 
-rm  $TEMPFILE1 $TEMPFILE2 $TEMPTHUMB
+rm $TEMPFILE1 $TEMPFILE2 $TEMPTHUMB
 

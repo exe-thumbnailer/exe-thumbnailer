@@ -18,10 +18,10 @@
             <applyto>/desktop/gnome/thumbnailers/application@x-ms-dos-executable/command</applyto>
             <owner>gnome-exe-thumbnailer</owner>
             <type>string</type>
-            <default>/usr/bin/gnome-exe-thumbnailer.sh %u %o</default>
+            <default>/usr/bin/gnome-exe-thumbnailer.sh %i %o</default>
             <locale name="C">
 		    <short>Command that creates a thumbnail</short>
-		    <long>Command that creates a thumbnail (%o) for a GNOME VFS URL (%u)</long>
+		    <long>Command that creates a thumbnail (%o) for a local .exe file (%i)</long>
             </locale>
         </schema>
 
@@ -42,10 +42,10 @@
             <applyto>/desktop/gnome/thumbnailers/application@x-msdownload/command</applyto>
             <owner>gnome-exe-thumbnailer</owner>
             <type>string</type>
-            <default>/usr/bin/gnome-exe-thumbnailer.sh %u %o</default>
+            <default>/usr/bin/gnome-exe-thumbnailer.sh %i %o</default>
             <locale name="C">
 		    <short>Command that creates a thumbnail</short>
-		    <long>Command that creates a thumbnail (%o) for a GNOME VFS URL (%u)</long>
+		    <long>Command that creates a thumbnail (%o) for a local .dll file (%i)</long>
             </locale>
         </schema>
 
