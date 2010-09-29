@@ -1,3 +1,12 @@
+gnome-exe-thumbnailer (0.7-0ubuntu1) maverick; urgency=low
+
+  * New version (thanks Jan Nekvasil)
+    - support Vista icons (LP: #622220)
+  * Include copy of LGPL 2.1 (LP: #648200)
+  * Put images in /usr/share/pixmaps/gnome-exe-thumbnailer
+
+ -- Scott Ritchie <scottritchie@ubuntu.com>  Wed, 29 Sep 2010 03:44:35 -0700
+
 gnome-exe-thumbnailer (0.6-0ubuntu1) maverick; urgency=low
 
   * New version (thanks Jan Nekvasil)

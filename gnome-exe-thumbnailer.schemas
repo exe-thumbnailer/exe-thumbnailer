@@ -49,5 +49,29 @@
             </locale>
         </schema>
 
+       <schema>
+            <key>/schemas/desktop/gnome/thumbnailers/application@x-msi/enable</key>
+            <applyto>/desktop/gnome/thumbnailers/application@x-msi/enable</applyto>
+            <owner>gnome-exe-thumbnailer</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Enable thumbnailing of application/x-msi files</short>
+                <long>Enable thumbnailing of application/x-msi files</long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/desktop/gnome/thumbnailers/application@x-msi/command</key>
+            <applyto>/desktop/gnome/thumbnailers/application@x-msi/command</applyto>
+            <owner>gnome-exe-thumbnailer</owner>
+            <type>string</type>
+            <default>/usr/bin/gnome-exe-thumbnailer.sh %i %o</default>
+            <locale name="C">
+		    <short>Command that creates a thumbnail</short>
+		    <long>Command that creates a thumbnail (%o) for a local .msi file (%i)</long>
+            </locale>
+        </schema>
+
     </schemalist>
 </gconfschemafile>
