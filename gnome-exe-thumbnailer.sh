@@ -1,18 +1,50 @@
 #!/bin/bash
 shopt -s nocasematch
 
-INPUTFILE="$1"
-
 TEMPFILE1=$(mktemp)
 TEMPFILE2=$(mktemp)
 TEMPTHUMB=$(mktemp)
+
+INPUTFILE="$1"
+OUTPUTFILE="$2"
+
+# Get the current icon theme (or override it by 3rd parameter):
+THEME="${3:-$(gconftool-2 --get /desktop/gnome/interface/icon_theme)}"
+
+case "$THEME" in
+	Faenza*)
+		THEME='faenza'
+		DRAW='roundRectangle 2,2 45,45 3,3'
+	;;
+	
+	elementary*|Ubuntu-Mono*|Humanity*)
+		THEME='elementary'
+		DRAW='roundRectangle 2,2 45,45 3,3'
+	;;
+
+	gnome|Human)
+		THEME='gnome'
+		DRAW='roundRectangle 2,2 45,45 4,4'
+	;;
+
+	Breathe)
+		THEME='breathe'
+		DRAW='roundRectangle 1,2 46,45 2,2'
+	;;
+	
+	Tango*|*)
+		THEME='tango'
+		DRAW='roundRectangle 2,2 45,45 4,4'
+	;;
+
+esac
 
 
 if [[ ${INPUTFILE##*.} = 'msi' ]]
 then
 	# Use generic installer icon for a .msi package:
-	ICON=/usr/share/pixmaps/gnome-exe-thumbnailer/generic-installer.png
-	OFFSET=16
+	ICON=/usr/share/pixmaps/gnome-exe-thumbnailer/$THEME/installer.png
+	TUNE='-modulate 120,100,0'
 
 else
 	# Extract group_icon resource.
@@ -26,8 +58,8 @@ else
 	if [ $? -eq 0 ]
 	then
 		# Use generic installer icon:
-		ICON=/usr/share/pixmaps/gnome-exe-thumbnailer/generic-installer.png
-		OFFSET=16
+		ICON=/usr/share/pixmaps/gnome-exe-thumbnailer/$THEME/installer.png
+		TUNE='-modulate 120'
 
 	else
 		# Process extracted data, if we have some:
@@ -47,7 +79,7 @@ else
 					}
 				}
 				END {
-					print 16 + (32 - w) / 2, i;
+					print (32 - w) / 2, i;
 				}'
 			)
 
@@ -57,7 +89,7 @@ else
 			then
 				INDEX=1
 				RESIZE=yes
-				OFFSET=20
+				OFFSET=$(($OFFSET - 12))
 			fi
 
 			# Finally try to extract chosen icon:
@@ -76,38 +108,91 @@ else
 				icotool --extract $TEMPFILE1 -o /tmp
 
 				# There's always a 32x32x32 icon in "Vista" icons, but just to be sure:
-				if [ -s ${TEMPFILE1}_${INDEX}_32x32x32.png ]
-				then
-					ICON=${TEMPFILE1}_${INDEX}_32x32x32.png
-				else
-					# Use the generic icon (icoutils < 0.29.1):
-					[[ ${INPUTFILE##*.} = 'exe' ]] && EXE='-exe'
-					ICON=/usr/share/pixmaps/gnome-exe-thumbnailer/generic$EXE.png
-					OFFSET=19
-				fi
-			fi
+				[ -s ${TEMPFILE1}_${INDEX}_32x32x32.png ] && ICON=${TEMPFILE1}_${INDEX}_32x32x32.png
 
-		else
-			# Just use the generic icon:
-			[[ ${INPUTFILE##*.} = 'exe' ]] && EXE='-exe'
-			ICON=/usr/share/pixmaps/gnome-exe-thumbnailer/generic$EXE.png
-			OFFSET=19
+			fi
 		fi
 	fi
 fi
 
+
 # Create the basic thumbnail:
-composite -geometry +$OFFSET+$OFFSET $ICON /usr/share/pixmaps/gnome-exe-thumbnailer/template.png $TEMPTHUMB
+
+if [ "$ICON" ]
+then
+	# Calculate the backgroud color:
+	COLOR=$(
+		convert $ICON -background white -flatten -fill white \
+		-fuzz 40% -opaque black -level 33%,66% -scale 1x1! $TUNE txt:- \
+		| tail -1 \
+		| grep -o '#......'
+	)
+
+else
+	# Just use the generic icon with backgroud color based on md5sum:
+	HUE=$(md5sum "$INPUTFILE" | cut -c 1-2)
+	HUE=$(printf "%d" 0x$HUE)
+	COLOR="hsb($HUE, 50%, 90%)"
+
+	LABEL=${INPUTFILE##*/}
+	LABEL=$(sed 's/^./\U&/; s/.$/\L&/' <<< "${LABEL:0:2}")
+
+	# Dim color for non-executable files:
+	if [[ ! ${INPUTFILE##*.} = 'exe' ]]
+	then
+		LIGHT=80
+		TUNE_NX='-modulate 100,20'
+	fi
+
+	convert -size 48x48 xc:none -gravity center -font Helvetica-Narrow-Bold -pointsize 24 \
+	-fill '#0000005C' -annotate +1+3 "$LABEL" \
+	-fill "hsb($HUE, 3%, ${LIGHT:-100}%)" -annotate +0+2 "$LABEL" \
+	png:$TEMPFILE1
+
+	ICON=$TEMPFILE1
+	OFFSET=-8
+
+fi
+
+# Create the final thumbnail:
+OFFSET=$(($OFFSET + 8))
+
+convert -size 48x48 xc:none -fill "$COLOR" -draw "$DRAW" $TUNE_NX miff:- \
+| composite -compose multiply /usr/share/pixmaps/gnome-exe-thumbnailer/$THEME/template.png - png:- \
+| composite -geometry +$OFFSET+$OFFSET $ICON - $TEMPTHUMB
 
 
 # Get the version number:
 if [[ ${INPUTFILE##*.} = 'msi' ]]
 then
-	VERSION=$(file "$INPUTFILE" \
-		| grep -o ', Subject: .*, Author: ' \
-		| egrep -o '[0-9]+\.[0-9]+(\.[0-9][0-9]?)?(beta)?' \
-		| head -1
-	)
+#	# Look for the ProductVersion property if user has the Microsoft (R) Windows Script Host installed:
+#	if [ -s "$HOME/.wine/drive_c/windows/system32/cscript.exe" ]
+#	then
+#		# Workaround wine bug #19799: cscript crashes if you call WScript.Arguments(0)
+#		# http://bugs.winehq.org/show_bug.cgi?id=19799
+#		<<< "
+#			Dim WI, DB, View, Record
+#			Set WI = CreateObject(\"WindowsInstaller.Installer\")
+#			Set DB = WI.OpenDatabase(\"$INPUTFILE\",0)
+#			Set View = DB.OpenView(\"SELECT Value FROM Property WHERE Property = 'ProductVersion'\")
+#			View.Execute
+#			Wscript.Echo View.Fetch.StringData(1)
+#		" iconv -f utf8 -t unicode > $TEMPFILE1.vbs
+#
+#		VERSION=$(
+#			wine cscript.exe //E:vbs //NoLogo Z:\\tmp\\${TEMPFILE1##*/}.vbs 2>/dev/null \
+#			| egrep -o '^[0-9]+\.[0-9]+(\.[0-9][0-9]?)?(beta)?'
+#		)
+#
+#	else
+		# Try to get the version number from extended file properties at least:
+		VERSION=$(
+			file "$INPUTFILE" \
+			| grep -o ', Subject: .*, Author: ' \
+			| egrep -o '[0-9]+\.[0-9]+(\.[0-9][0-9]?)?(beta)?' \
+			| head -1
+		)
+#	fi
 
 else
 	# Extract raw version resource:
@@ -136,9 +221,9 @@ then
 	-fill '#00001048' \
 	-draw $'color 0,0 point\ncolor 0,8 point' -flop \
 	-draw $'color 0,0 point\ncolor 0,8 point' -flop \
-	miff:- | composite -gravity southeast -geometry +1+3 - $TEMPTHUMB $2
+	miff:- | composite -gravity southeast - $TEMPTHUMB $OUTPUTFILE
 else
-	cp $TEMPTHUMB $2
+	cp $TEMPTHUMB $OUTPUTFILE
 fi
 
 

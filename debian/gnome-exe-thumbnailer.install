@@ -1,3 +1,2 @@
-*.png /usr/share/pixmaps/gnome-exe-thumbnailer
 gnome-exe-thumbnailer.sh /usr/bin
 gnome-exe-thumbnailer.schemas /usr/share/gconf/schemas
