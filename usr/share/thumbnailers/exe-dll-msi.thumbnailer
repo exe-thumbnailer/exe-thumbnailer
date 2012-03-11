@@ -1,0 +1,4 @@
+[Thumbnailer Entry]
+TryExec=/usr/bin/gnome-exe-thumbnailer
+Exec=/usr/bin/gnome-exe-thumbnailer %i %o %u
+MimeType=application/x-ms-dos-executable;application/x-msdownload;application/x-msi

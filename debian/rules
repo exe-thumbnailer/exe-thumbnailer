@@ -3,5 +3,3 @@
 %:
 	dh $@
 
-override_dh_auto_install:
-	cp -R pixmaps/gnome-exe-thumbnailer debian/gnome-exe-thumbnailer/usr/share/pixmaps
