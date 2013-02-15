@@ -1,3 +1,9 @@
+gnome-exe-thumbnailer (0.9-0ubuntu2) raring; urgency=low
+
+  * Mark package Multi-Arch: foreign (LP: #1123710)
+
+ -- Scott Ritchie <scottritchie@ubuntu.com>  Fri, 15 Feb 2013 17:10:27 -0800
+
 gnome-exe-thumbnailer (0.9-0ubuntu1) precise; urgency=low
 
   * New version (thanks Jan Nekvasil)

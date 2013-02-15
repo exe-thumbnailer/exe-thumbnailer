@@ -8,6 +8,7 @@ Standards-Version: 3.9.2
 
 Package: gnome-exe-thumbnailer
 Architecture: all
+Multi-Arch: foreign
 Depends: ${misc:Depends}, icoutils, imagemagick, python
 Description: Wine .exe and other executable thumbnailer for Gnome
  gnome-exe-thumbnailer is a thumbnailer for Gnome that will give Windows .exe
