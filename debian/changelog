@@ -1,3 +1,19 @@
+gnome-exe-thumbnailer (0.9.3-0ubuntu1) trusty; urgency=low
+
+  * New upstream version
+     - application/x-ms-shortcut (.lnk) support,
+       thanks to jopka (https://launchpad.net/~jopka)
+     - templates for the Moka icon theme
+     - look for the usable icons with lower bit depths 
+       when the current one contains only an empty box 
+       (e.g. in Simon Tatham's Portable Puzzle Collection)
+     - support both ~/.thumbnails and ~/.cache/thumbnails storages
+     - erase appropriate old thumbnails in all thumbnails/* 
+       subfolders after theme change, not only in thumbnails/normal
+  * Update standards to 3.9.5
+
+ -- Scott Ritchie <scottritchie@ubuntu.com>  Wed, 26 Feb 2014 20:29:55 -0800
+
 gnome-exe-thumbnailer (0.9-0ubuntu2) raring; urgency=low
 
   * Mark package Multi-Arch: foreign (LP: #1123710)
