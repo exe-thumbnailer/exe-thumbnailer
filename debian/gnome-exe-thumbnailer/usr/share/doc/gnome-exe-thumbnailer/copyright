@@ -1,9 +1,9 @@
-Format: http://dep.debian.net/deps/dep5
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: gnome-exe-thumbnailer
-Source: Received via email from Jan Nekvasil
+Source: https://launchpad.net/ubuntu/+source/gnome-exe-thumbnailer
 
 Files: *
-Copyright: 2009-2012
+Copyright:
  2010-2012 Jan Nekvasil <jan.nekvasil@ryant.cz>
  2009-2010 Christian Dannie Storgaard <cybolic@gmail.com>
  2009-2012 Scott Ritchie <scottritchie@ubuntu.com>
@@ -17,7 +17,7 @@ License: LGPL-2.1+
  License can be found in /usr/share/common-licenses/LGPL-2.1 file.
 
 Files: debian/*
-Copyright: 2009-2012,2015
+Copyright:
  2010-2012 Jan Nekvasil <jan.nekvasil@ryant.cz>
  2009-2010 Christian Dannie Storgaard <cybolic@gmail.com>
  2009-2012 Scott Ritchie <scottritchie@ubuntu.com>

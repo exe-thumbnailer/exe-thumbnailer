@@ -1,3 +1,15 @@
+gnome-exe-thumbnailer (0.9.3-1) unstable; urgency=medium
+
+  * Fix debian/compat and debian/coypright.
+  * Update copyright URI to
+    https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+  * Make the package 3.0 (quilt).
+  * Fix capitalization: Gnome -> GNOME.
+  * Set source in debian/copyright to
+    https://launchpad.net/ubuntu/+source/gnome-exe-thumbnailer.
+
+ -- James Lu <glolol1@hotmail.com>  Mon, 27 Apr 2015 11:03:28 -0700
+
 gnome-exe-thumbnailer (0.9.3) unstable; urgency=medium
 
   * Initial Debian release, forked from Ubuntu. (Closes: #767376)
