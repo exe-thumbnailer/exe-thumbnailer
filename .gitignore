@@ -1,0 +1,4 @@
+debian/files
+debian/*.log
+debian/*.substvars
+debian/gnome-exe-thumbnailer
