@@ -1,33 +1,25 @@
 gnome-exe-thumbnailer (0.9.3-1) unstable; urgency=medium
 
-  * Fix debian/compat and debian/coypright.
-  * Update copyright URI to
-    https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-  * Make the package 3.0 (quilt).
-  * Fix capitalization: Gnome -> GNOME.
-  * Set source in debian/copyright to
-    https://launchpad.net/ubuntu/+source/gnome-exe-thumbnailer.
-
- -- James Lu <glolol1@hotmail.com>  Mon, 27 Apr 2015 11:03:28 -0700
-
-gnome-exe-thumbnailer (0.9.3) unstable; urgency=medium
-
   * Initial Debian release, forked from Ubuntu. (Closes: #767376)
   * Update debian/ files:
-     - Set myself as maintainer.
+     - Set the Debian Wine Party as maintainer, and add myself as uploader.
      - Bump to debhelper 9.
      - Remove outdated gconf2 build-dependency, depend on libglib2.0-bin
        instead (for theme fetching).
      - Remove unnecessary dependency on python.
      - Update Standards Version to 3.9.6.
      - Set priority to optional from extra.
-     - Include my changes in debian/copyright.
+     - Add my changes in debian/copyright.
+     - Set source in debian/copyright to
+       https://launchpad.net/ubuntu/+source/gnome-exe-thumbnailer.
      - Remove /usr/share/gconf/schemas from dirs file.
-     - Explicitly set source/format to 3.0 native. This is what the Ubuntu
-       packaging seems to suggest, as there is only one .tar.gz
-       file available for download.
+     - Update copyright URL to
+       https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+     - Make the package 3.0 (quilt).
+     - Fix capitalization: Gnome -> GNOME.
+     - Install a man page.
 
- -- James Lu <glolol1@hotmail.com>  Wed, 22 Apr 2015 20:20:35 -0700
+ -- James Lu <glolol1@hotmail.com>  Tue, 28 Apr 2015 18:06:22 -0700
 
 gnome-exe-thumbnailer (0.9.3-0ubuntu1) trusty; urgency=low
 
