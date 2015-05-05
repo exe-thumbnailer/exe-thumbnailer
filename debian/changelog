@@ -1,4 +1,4 @@
-gnome-exe-thumbnailer (0.9.3-2) unstable; urgency=medium
+gnome-exe-thumbnailer (0.9.3-1) unstable; urgency=medium
 
   * Initial Debian release, forked from Ubuntu. (Closes: #767376)
   * Update debian/ files:
