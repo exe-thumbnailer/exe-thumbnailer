@@ -15,5 +15,5 @@ Description: Wine .exe and other executable thumbnailer for GNOME
  gnome-exe-thumbnailer is a thumbnailer for GNOME that will give Windows .exe
  files an icon based on their embedded icon and a generic "Wine program" icon.
  If the program has normal execute permissions, then the standard embedded icon
- will be shown.  This thumbnailer will also give a thumbnail icon for .dll, .msi, 
+ will be shown. This thumbnailer will also create thumbnails for .dll, .msi, 
  and similar executable programs.
