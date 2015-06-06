@@ -1,3 +1,14 @@
+gnome-exe-thumbnailer (0.9.3-2~) UNRELEASED; urgency=medium
+
+  * debian/control:
+     - Fix extended description field: gnome-exe-thumbnailer only
+       thumbnails Windows-related exectuables (.dll, .msi, etc.),
+       not generic executable files like .py and .jar (which I mistakenly
+       wrote).
+     - Update Vcs-Git and Vcs-Browser fields to Alioth.
+
+ -- James Lu <glolol1@hotmail.com>  Sat, 06 Jun 2015 12:07:34 -0700
+
 gnome-exe-thumbnailer (0.9.3-1) unstable; urgency=medium
 
   * Initial Debian release, forked from Ubuntu. (Closes: #767376)
