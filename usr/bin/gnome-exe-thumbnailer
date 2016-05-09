@@ -104,9 +104,39 @@ case "$THEME" in
 		SHADOW='+1'
 	;;
 
-	NITRUX)
+	NITRUX-Buttons)
+		THEME='nitrux-buttons'
+		DRAW='roundRectangle 1,1 46,46 6,6'
+		SHADOW='+0'
+	;;
+
+	NITRUX-Buttons-2)
+		THEME='nitrux-buttons-2'
+		DRAW='roundRectangle 1,1 46,46 6,6'
+		SHADOW='+0'
+	;;
+
+	NITRUX*)
 		THEME='nitrux'
 		DRAW='roundRectangle 2,2 45,45 1,1'
+		SHADOW='+0'
+	;;
+
+	Captiva)
+		THEME='captiva'
+		DRAW='roundRectangle 2,1 45,43 15,15'
+		SHADOW='+0'
+	;;
+
+	Paper)
+		THEME='paper'
+		DRAW='roundRectangle 4,4 43,43 1,1'
+		SHADOW='+0'
+	;;
+
+	Square-Beam)
+		THEME='square-beam'
+		DRAW='roundRectangle 0,0 47,44 1,1'
 		SHADOW='+0'
 	;;
 
@@ -122,6 +152,30 @@ case "$THEME" in
 		SHADOW='+0'
 	;;
 
+	Evolvere-*vivid*)
+		THEME='evolvere-vivid'
+		DRAW='roundRectangle 0,0 47,47, 1,1'
+		SHADOW='+0'
+	;;
+
+	Evolvere)
+		THEME='evolvere'
+		DRAW='roundRectangle 0,0 47,47, 1,1'
+		SHADOW='+0'
+	;;
+
+	Compass)
+		THEME='compass'
+		DRAW='roundRectangle 3,3 44,44 5,5'
+		SHADOW='+0'
+	;;
+
+	Vibrancy*)
+		THEME='vibrancy'
+		DRAW='roundRectangle 3,3 44,44 8,8'
+		SHADOW='+0'
+	;;
+
 	Tango*|*)
 		THEME='tango'
 		DRAW='roundRectangle 2,2 45,45 4,4'
@@ -130,6 +184,9 @@ case "$THEME" in
 
 esac
 
+INPUTFILE_SIZE=$(du -b "$INPUTFILE" | cut -f1 -d$'\t')
+THUMBNAIL_LIMIT=$(gsettings get org.gnome.nautilus.preferences thumbnail-limit | cut -f2 -d' ')
+
 
 if [[ ${INPUTFILE##*.} = 'msi' ]]
 then
@@ -137,7 +194,8 @@ then
 	ICON=/usr/share/pixmaps/gnome-exe-thumbnailer/$THEME/installer.png
 	TUNE='-modulate 120,100,0'
 
-else
+elif [ $INPUTFILE_SIZE -lt $THUMBNAIL_LIMIT ]
+then
 	# Extract group_icon resource. If we get the "wrestool: $INPUTFILE could not find `1' in
 	# `group_icon' resource." error, there is a 99.9% chance that input file is an installer.
 
@@ -232,8 +290,8 @@ else
 
 fi
 
-# Create the basic thumbnail:
 
+# Create the basic thumbnail:
 if [ "$ICON" ]
 then
 	# Calculate the backgroud color:
@@ -321,7 +379,8 @@ then
 		)
 	fi
 
-else
+elif [ $INPUTFILE_SIZE -lt $THUMBNAIL_LIMIT ]
+then
 	# Extract raw version resource:
 	wrestool --extract --raw --type=version "$INPUTFILE" > $TEMPFILE1
 
@@ -336,6 +395,7 @@ else
 			| sed -r -n 's/.*Version[^0-9]*([0-9]+\.[0-9]+(\.[0-9][0-9]?)?).*/\1/p'
 		)
 	fi
+
 fi
 
 
