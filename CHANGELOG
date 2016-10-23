@@ -1,3 +1,12 @@
+gnome-exe-thumbnailer (0.9.4-0ubuntu1) UNRELEASED; urgency=medium
+
+  * New upstream version
+     - respect org.gnome.nautilus.preferences thumbnail-limit (LP: #602767)
+     - thumbnail templates for Captiva, Compass, Evolvere, NITRUX-Buttons,
+       Paper, Square-Beam, and Vibrancy icon themes
+
+ -- Jan Nekvasil <jan@nekvasil.cz>  Tue, 12 May 2015 15:06:06 +0200
+
 gnome-exe-thumbnailer (0.9.3-0ubuntu1) trusty; urgency=low
 
   * New upstream version
