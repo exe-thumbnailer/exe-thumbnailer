@@ -394,7 +394,7 @@ fi
 if [ "$VERSION" ]
 then
 	convert -font -*-clean-medium-r-*-*-6-*-*-*-*-*-*-* \
-	-background transparent -fill white label:"$VERSION" \
+	-background '#00001090' -fill white label:"$VERSION" \
 	-trim -bordercolor '#00001090' -border 2 \
 	-fill '#00001048' \
 	-draw $'color 0,0 point\ncolor 0,8 point' -flop \
