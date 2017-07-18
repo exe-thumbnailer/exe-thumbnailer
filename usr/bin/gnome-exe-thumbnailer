@@ -20,7 +20,10 @@ then
 
 fi
 
-TEMPDIR="$(mktemp -d)"
+if ! TEMPDIR="$(mktemp -d)"
+then
+	echo "gnome-exe-thumbnailer: Failed to make a temporary folder, quitting..." && exit 1
+fi
 TEMPFILE1="$TEMPDIR/group_icon_res"
 TEMPFILE2="$TEMPDIR/extracted_icon.png"
 TEMPTHUMB="$TEMPDIR/thumbnail.png"
