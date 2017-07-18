@@ -1,4 +1,14 @@
-gnome-exe-thumbnailer (0.9.4-0ubuntu1) UNRELEASED; urgency=medium
+gnome-exe-thumbnailer (0.9.5) unstable; urgency=high
+
+  * Add a fallback thumbnail_limit value of 10485760 bytes if Nautilus isn't installed
+  * Switch to msitools' msiinfo for ProductVersion fetching. This replaces the insecure
+    VBScript-based parsing, which has issues described at
+    http://news.dieweltistgarnichtso.net/posts/gnome-thumbnailer-msi-fail.html
+  * Use a dark background colour for the version label so that it is consistently visible
+
+ -- James Lu <bitflip3@gmail.com>  Tue, 18 Jul 2017 08:08:18 +0800
+
+gnome-exe-thumbnailer (0.9.4-0ubuntu1) unstable; urgency=medium
 
   * New upstream version
      - respect org.gnome.nautilus.preferences thumbnail-limit (LP: #602767)
