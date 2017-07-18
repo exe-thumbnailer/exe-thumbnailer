@@ -41,7 +41,7 @@ fi
 mkdir -p "$THUMBNAILS_PATH"
 
 # Delete previously created thumbnails if icon theme has been changed since last run
-if [ ! "$THEME" = "$(cat $THUMBNAILS_PATH/gnome-exe-thumbnailer.cfg)" ]
+if [ -s "$THUMBNAILS_PATH/gnome-exe-thumbnailer.cfg" ] && [ ! "$THEME" = "$(cat $THUMBNAILS_PATH/gnome-exe-thumbnailer.cfg)" ]
 then
 	rm $(cat $THUMBNAILS_PATH/gnome-exe-thumbnailer.files)
 	> $THUMBNAILS_PATH/gnome-exe-thumbnailer.files
