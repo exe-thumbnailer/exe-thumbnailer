@@ -20,9 +20,10 @@ then
 
 fi
 
-TEMPFILE1=$(mktemp)
-TEMPFILE2=$(mktemp)
-TEMPTHUMB=$(mktemp)
+TEMPDIR="$(mktemp -d)"
+TEMPFILE1="$TEMPDIR/group_icon_res"
+TEMPFILE2="$TEMPDIR/extracted_icon.png"
+TEMPTHUMB="$TEMPDIR/thumbnail.png"
 
 # Get the current icon theme (or override it by 4th parameter):
 eval THEME="${4:-$(gsettings get org.gnome.desktop.interface icon-theme)}"
@@ -262,7 +263,7 @@ then
 					# Icotool from icoutils 0.29.1 supports it already, but is unable to extract the one selected icon only.
 
 					# Try to extract all icons:
-					icotool --extract $TEMPFILE1 -o /tmp
+					icotool --extract $TEMPFILE1 -o "$TEMPDIR"
 
 					# There's always a 32x32x32 icon in "Vista" icons, but just to be sure:
 					[ -s ${TEMPFILE1}_${INDEX}_32x32x${BITDEPTH}.png ] && ICON=${TEMPFILE1}_${INDEX}_32x32x${BITDEPTH}.png
@@ -404,5 +405,4 @@ else
 	cp $TEMPTHUMB $OUTPUTFILE
 fi
 
-rm $TEMPFILE1* $TEMPFILE2 $TEMPTHUMB
-
+rm -r "$TEMPDIR"
