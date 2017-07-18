@@ -165,7 +165,7 @@ case "$THEME" in
 
 	Moka)
 		THEME='moka'
-		DRAW='roundRectangle 2,2 45,45 11,11'
+		DRAW='roundRectangle 2,3 44,45 8,8'
 		SHADOW='+0'
 	;;
 
