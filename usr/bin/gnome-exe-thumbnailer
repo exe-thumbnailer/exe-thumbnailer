@@ -79,7 +79,7 @@ case "$THEME" in
 		SHADOW='+1'
 	;;
 
-	Faenza*)
+	*Faenza*)
 		THEME='faenza'
 		DRAW='roundRectangle 2,2 45,45 3,3'
 		SHADOW='+1'
