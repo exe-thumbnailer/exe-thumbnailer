@@ -327,28 +327,16 @@ then
 	)
 
 else
-	# Just use the generic icon with backgroud color based on md5sum:
-	HUE=$(md5sum "$INPUTFILE" | cut -c 1-2)
-	HUE=$(printf "%d" "0x$HUE")
-	COLOR="hsb($HUE, 50%, 90%)"
+	# We failed to fetch a meaningful icon, so exit with a non-zero code and force the file manager
+	# to use the theme's default icon.
 
-	LABEL=${INPUTFILE##*/}
-	LABEL=$(sed 's/^./\U&/; s/.$/\L&/' <<< "${LABEL:0:2}")
-
-	# Dim color for non-executable files:
-	if [[ ! ${INPUTFILE##*.} = 'exe' ]]
-	then
-		LIGHT=80
-		TUNE_NX='-modulate 100,20'
-	fi
-
-	convert -size 48x48 xc:none -gravity center -font Helvetica-Narrow-Bold -pointsize 24 \
-	-fill '#0000005C' -annotate $SHADOW+3 "$LABEL" \
-	-fill "hsb($HUE, 3%, ${LIGHT:-100}%)" -annotate +0+2 "$LABEL" \
-	"png:$TEMPFILE1"
-
-	ICON="$TEMPFILE1"
-	OFFSET=-8
+	# There used to be a fallback icon generation clause here, but I removed that because the output
+	# icons don't fit well with most icon themes. Specifically, the output was overly colourful,
+	# whereas file icons on most themes (I checked Faenza, Numix, Moka, Oxygen, Tango, Adwaita) are
+	# relaxed in the amount of colours they use.
+	# (Also, repeating the first two letters of the filename as a label is largely meaningless to
+	# end users.)
+	exit 1
 
 fi
 
