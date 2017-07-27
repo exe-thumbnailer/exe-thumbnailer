@@ -1,6 +1,7 @@
 #!/bin/bash
 
 shopt -s nocasematch
+set -x
 
 INPUTFILE="$1"
 OUTPUTFILE="$2"
@@ -55,11 +56,11 @@ fi
 mkdir -p "$THUMBNAILS_PATH"
 
 # Delete previously created thumbnails if icon theme has been changed since last run
-if [ -s "$THUMBNAILS_PATH/gnome-exe-thumbnailer.cfg" ] && [ ! "$THEME" = "$(cat $THUMBNAILS_PATH/gnome-exe-thumbnailer.cfg)" ]
+if [ -s "$THUMBNAILS_PATH/gnome-exe-thumbnailer.cfg" ] && [ ! "$THEME" = "$(cat "$THUMBNAILS_PATH/gnome-exe-thumbnailer.cfg")" ]
 then
-	rm $(cat $THUMBNAILS_PATH/gnome-exe-thumbnailer.files)
-	> $THUMBNAILS_PATH/gnome-exe-thumbnailer.files
-	echo "$THEME" > $THUMBNAILS_PATH/gnome-exe-thumbnailer.cfg
+	rm "$(cat "$THUMBNAILS_PATH/gnome-exe-thumbnailer.files")"
+	true > "$THUMBNAILS_PATH/gnome-exe-thumbnailer.files"
+	echo "$THEME" > "$THUMBNAILS_PATH/gnome-exe-thumbnailer.cfg"
 
 fi
 
@@ -217,14 +218,14 @@ then
 	ICON=/usr/share/pixmaps/gnome-exe-thumbnailer/$THEME/installer.png
 	TUNE='-modulate 120,100,0'
 
-elif [ $INPUTFILE_SIZE -lt $THUMBNAIL_LIMIT ]
+elif [ "$INPUTFILE_SIZE" -lt "$THUMBNAIL_LIMIT" ]
 then
 	# Extract group_icon resource. If we get the "wrestool: $INPUTFILE could not find `1' in
 	# `group_icon' resource." error, there is a 99.9% chance that input file is an installer.
 
 	# Warning: Some redirection magic ahead.
 
-	if wrestool --extract --type=group_icon "$INPUTFILE" 2>&1 >$TEMPFILE1 \
+	if wrestool --extract --type=group_icon "$INPUTFILE" 2>&1 >"$TEMPFILE1" \
 	| grep "could not find \`1' in \`group_icon' resource"
 	then
 		# Use generic installer icon:
@@ -233,7 +234,7 @@ then
 
 	else
 		# Process extracted data, if we have some:
-		if [ -s $TEMPFILE1 ]
+		if [ -s "$TEMPFILE1" ]
 		then
 			# Look for the best usable icon. 32x32x32 is the first choice, but sometimes is that icon only
 			# an empty box with no visible pixels (e.g. in Simon Tatham's Portable Puzzle Collection).
@@ -241,7 +242,7 @@ then
 			for BITDEPTH in 32 24 8 4 1
 			do
 				read OFFSET INDEX < <(
-					icotool --list $TEMPFILE1 | awk '{
+					icotool --list "$TEMPFILE1" | awk '{
 						ci=int(substr($2,index($2,"=") + 1));
 						cw=int(substr($3,index($3,"=") + 1));
 						cb=int(substr($5,index($5,"=") + 1));
@@ -267,29 +268,29 @@ then
 				fi
 
 				# Finally try to extract chosen icon:
-				icotool --extract --index=$INDEX $TEMPFILE1 -o $TEMPFILE2
+				icotool --extract --index=$INDEX "$TEMPFILE1" -o "$TEMPFILE2"
 
 				if [ -s $TEMPFILE2 ]
 				then
 					ICON=$TEMPFILE2
-					[ "$RESIZE" ] && mogrify -resize 32x32 $ICON
+					[ "$RESIZE" ] && mogrify -resize 32x32 "$ICON"
 
 				else
 					# This case generally happens when the hi-res icons are in new "Vista" icon format (bunch of compressed PNGs).
 					# Icotool from icoutils 0.29.1 supports it already, but is unable to extract the one selected icon only.
 
 					# Try to extract all icons:
-					icotool --extract $TEMPFILE1 -o "$TEMPDIR"
+					icotool --extract "$TEMPFILE1" -o "$TEMPDIR"
 
 					# There's always a 32x32x32 icon in "Vista" icons, but just to be sure:
-					[ -s ${TEMPFILE1}_${INDEX}_32x32x${BITDEPTH}.png ] && ICON=${TEMPFILE1}_${INDEX}_32x32x${BITDEPTH}.png
+					[ -s "${TEMPFILE1}_${INDEX}_32x32x${BITDEPTH}.png" ] && ICON="${TEMPFILE1}_${INDEX}_32x32x${BITDEPTH}.png"
 
 				fi
 
 				if [ "$ICON" ]
 				then
 					# Verify that the selected icon is not just an empty box:
-					if [ "$(convert $ICON -filter box -resize 1x1! -format "%[fx:u]" info:)" = '0' ]
+					if [ "$(convert "$ICON" -filter box -resize 1x1! -format "%[fx:u]" info:)" = '0' ]
 					then
 						# Take next iteration with lower bit depth
 						unset ICON
@@ -319,8 +320,8 @@ if [ "$ICON" ]
 then
 	# Calculate the backgroud color:
 	COLOR=$(
-		convert $ICON -background white -flatten -fill white \
-		-fuzz 40% -opaque black -level 33%,66% -scale 1x1! $TUNE txt:- \
+		convert "$ICON" -background white -flatten -fill white \
+		-fuzz 40% -opaque black -level 33%,66% -scale 1x1! "$TUNE" txt:- \
 		| tail -1 \
 		| grep -o '#......'
 	)
@@ -328,7 +329,7 @@ then
 else
 	# Just use the generic icon with backgroud color based on md5sum:
 	HUE=$(md5sum "$INPUTFILE" | cut -c 1-2)
-	HUE=$(printf "%d" 0x$HUE)
+	HUE=$(printf "%d" "0x$HUE")
 	COLOR="hsb($HUE, 50%, 90%)"
 
 	LABEL=${INPUTFILE##*/}
@@ -344,9 +345,9 @@ else
 	convert -size 48x48 xc:none -gravity center -font Helvetica-Narrow-Bold -pointsize 24 \
 	-fill '#0000005C' -annotate $SHADOW+3 "$LABEL" \
 	-fill "hsb($HUE, 3%, ${LIGHT:-100}%)" -annotate +0+2 "$LABEL" \
-	png:$TEMPFILE1
+	"png:$TEMPFILE1"
 
-	ICON=$TEMPFILE1
+	ICON="$TEMPFILE1"
 	OFFSET=-8
 
 fi
@@ -357,16 +358,16 @@ OFFSET=$(($OFFSET + 8))
 if [ "$SHORTCUT" ]
 then
 	# Variant with MS shortcut emblem in bottom left corner for .lnk files
-	convert -size 48x48 xc:none -fill "$COLOR" -draw "$DRAW" $TUNE_NX miff:- \
-	| composite -compose multiply /usr/share/pixmaps/gnome-exe-thumbnailer/$THEME/template.png - miff:- \
-	| composite -geometry +$OFFSET+$OFFSET $ICON - png:- \
-	| composite -gravity southwest /usr/share/pixmaps/gnome-exe-thumbnailer/shortcut.png - $TEMPTHUMB
+	convert -size 48x48 xc:none -fill "$COLOR" -draw "$DRAW" "$TUNE_NX" miff:- \
+	| composite -compose multiply "/usr/share/pixmaps/gnome-exe-thumbnailer/$THEME/template.png" - miff:- \
+	| composite -geometry "+$OFFSET+$OFFSET" "$ICON" - png:- \
+	| composite -gravity southwest /usr/share/pixmaps/gnome-exe-thumbnailer/shortcut.png - "$TEMPTHUMB"
 
 else
 	# Plain variant
-	convert -size 48x48 xc:none -fill "$COLOR" -draw "$DRAW" $TUNE_NX miff:- \
-	| composite -compose multiply /usr/share/pixmaps/gnome-exe-thumbnailer/$THEME/template.png - png:- \
-	| composite -geometry +$OFFSET+$OFFSET $ICON - $TEMPTHUMB
+	convert -size 48x48 xc:none -fill "$COLOR" -draw "$DRAW" "$TUNE_NX" miff:- \
+	| composite -compose multiply "/usr/share/pixmaps/gnome-exe-thumbnailer/$THEME/template.png" - png:- \
+	| composite -geometry "+$OFFSET+$OFFSET" "$ICON" - "$TEMPTHUMB"
 
 fi
 
@@ -387,16 +388,16 @@ then
 		)
 	fi
 
-elif [ $INPUTFILE_SIZE -lt $THUMBNAIL_LIMIT ]
+elif [ "$INPUTFILE_SIZE" -lt "$THUMBNAIL_LIMIT" ]
 then
 	# Extract raw version resource:
-	wrestool --extract --raw --type=version "$INPUTFILE" > $TEMPFILE1
+	wrestool --extract --raw --type=version "$INPUTFILE" > "$TEMPFILE1"
 
-	if [ -s $TEMPFILE1 ]
+	if [ -s "$TEMPFILE1" ]
 	then
 		# Search for a sane version string.
 		# This (especially the final regexp) took me really long time to figure out. Am I that lame?
-		VERSION=$(< $TEMPFILE1 \
+		VERSION=$(< "$TEMPFILE1" \
 			tr '\0, ' '\t.\0' \
 			| sed 's/\t\t/_/g' \
 			| tr -c -d '[:print:]' \
@@ -416,9 +417,9 @@ then
 	-fill '#00001048' \
 	-draw $'color 0,0 point\ncolor 0,8 point' -flop \
 	-draw $'color 0,0 point\ncolor 0,8 point' -flop \
-	miff:- | composite -gravity southeast - $TEMPTHUMB $OUTPUTFILE
+	miff:- | composite -gravity southeast - "$TEMPTHUMB" "$OUTPUTFILE"
 else
-	cp $TEMPTHUMB $OUTPUTFILE
+	cp "$TEMPTHUMB" "$OUTPUTFILE"
 fi
 
 rm -r "$TEMPDIR"
