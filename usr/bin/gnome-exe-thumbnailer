@@ -1,7 +1,9 @@
 #!/bin/bash
 
 shopt -s nocasematch
-set -x
+
+# Uncomment this line to enable verbose/debug logging
+#set -x
 
 INPUTFILE="$1"
 OUTPUTFILE="$2"
