@@ -73,133 +73,111 @@ case "$THEME" in
 	Faience*)
 		THEME='faience'
 		DRAW='roundRectangle 2,2 45,45 3,3'
-		SHADOW='+1'
 	;;
 
 	elementary*|Ubuntu-Mono*|Humanity*)
 		THEME='elementary'
 		DRAW='roundRectangle 2,2 45,45 3,3'
-		SHADOW='+1'
 	;;
 
 	*Faenza*)
 		THEME='faenza'
 		DRAW='roundRectangle 2,2 45,45 3,3'
-		SHADOW='+1'
 	;;
 
 	elementary*|Ubuntu-Mono*|Humanity*)
 		THEME='elementary'
 		DRAW='roundRectangle 2,2 45,45 3,3'
-		SHADOW='+1'
 	;;
 
 	AwOken)
 		THEME='awoken'
 		DRAW='roundRectangle 3,3 44,44 3,3'
-		SHADOW='-1'
 	;;
 
 	AwOkenWhite)
 		THEME='awoken-white'
 		DRAW='roundRectangle 3,3 44,44 3,3'
-		SHADOW='-1'
 	;;
 
 	AwOkenDark)
 		THEME='awoken-dark'
 		DRAW='roundRectangle 4,4 43,43 3,3'
-		SHADOW='-1'
 	;;
 
 	gnome|Human)
 		THEME='gnome'
 		DRAW='roundRectangle 2,2 45,45 4,4'
-		SHADOW='+0'
 	;;
 
 	Breathe)
 		THEME='breathe'
 		DRAW='roundRectangle 1,2 46,45 2,2'
-		SHADOW='+1'
 	;;
 
 	NITRUX-Buttons)
 		THEME='nitrux-buttons'
 		DRAW='roundRectangle 1,1 46,46 6,6'
-		SHADOW='+0'
 	;;
 
 	NITRUX-Buttons-2)
 		THEME='nitrux-buttons-2'
 		DRAW='roundRectangle 1,1 46,46 6,6'
-		SHADOW='+0'
 	;;
 
 	NITRUX*)
 		THEME='nitrux'
 		DRAW='roundRectangle 2,2 45,45 1,1'
-		SHADOW='+0'
 	;;
 
 	Captiva)
 		THEME='captiva'
 		DRAW='roundRectangle 2,1 45,43 15,15'
-		SHADOW='+0'
 	;;
 
 	Paper)
 		THEME='paper'
 		DRAW='roundRectangle 4,4 43,43 1,1'
-		SHADOW='+0'
 	;;
 
 	Square-Beam)
 		THEME='square-beam'
 		DRAW='roundRectangle 0,0 47,44 1,1'
-		SHADOW='+0'
 	;;
 
 	box)
 		THEME='box'
 		DRAW='roundRectangle 5,5 42,42 1,1'
-		SHADOW='+0'
 	;;
 
 	Moka)
 		THEME='moka'
 		DRAW='roundRectangle 2,3 44,45 8,8'
-		SHADOW='+0'
 	;;
 
 	Evolvere-*vivid*)
 		THEME='evolvere-vivid'
 		DRAW='roundRectangle 0,0 47,47, 1,1'
-		SHADOW='+0'
 	;;
 
 	Evolvere)
 		THEME='evolvere'
 		DRAW='roundRectangle 0,0 47,47, 1,1'
-		SHADOW='+0'
 	;;
 
 	Compass)
 		THEME='compass'
 		DRAW='roundRectangle 3,3 44,44 5,5'
-		SHADOW='+0'
 	;;
 
 	Vibrancy*)
 		THEME='vibrancy'
 		DRAW='roundRectangle 3,3 44,44 8,8'
-		SHADOW='+0'
 	;;
 
 	Tango*|*)
 		THEME='tango'
 		DRAW='roundRectangle 2,2 45,45 4,4'
-		SHADOW='+1'
 	;;
 
 esac
