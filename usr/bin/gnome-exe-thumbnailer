@@ -8,17 +8,29 @@ shopt -s nocasematch
 INPUTFILE="$1"
 OUTPUTFILE="$2"
 
-# application/x-ms-shortcut (.lnk) support, thanks to jopka (https://launchpad.net/~jopka)
+# application/x-ms-shortcut (.lnk) support.
+# Original version by jopka (https://launchpad.net/~jopka), modified to use
+# lnkinfo by James Lu
 if [[ ${INPUTFILE##*.} = 'lnk' ]]
 then
-	which winepath >&2 || exit
+	which winepath >&2 || exit 1
+
+	LNKINFO=$(lnkinfo "$INPUTFILE")
+
+	# First try to get the relative shortcut path, and fall back to the absolute (local) path if that doesn't exist
+	RELPATH="$(grep 'Relative path' <<< "$LNKINFO" | sed 's/^.*\: //')"
+	if [ -z "$RELPATH" ]
+	then
+		RELPATH="$(grep 'Local path' <<< "$LNKINFO" | sed 's/^.*\: //')"
+	else
+		RELPATH="$(dirname "$INPUTFILE")/${RELPATH}"
+	fi
 
 	INPUTFILE="$(
-		winepath -u "$(winedump "$INPUTFILE" \
-		| sed -n -r '/^LocalPath of/s/.*\("(.*\.[Ee][Xx][Ee])"\)$/\1/p')"
+		winepath -u "$RELPATH"
 	)"
 
-	[ ! "$INPUTFILE" ] && exit
+	[ ! "$INPUTFILE" ] && exit 1
 	SHORTCUT='TRUE'
 
 fi
