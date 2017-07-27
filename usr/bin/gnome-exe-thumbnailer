@@ -221,7 +221,7 @@ then
 			# In that case we can try to lower the bit depth and look again.
 			for BITDEPTH in 32 24 8 4 1
 			do
-				read OFFSET INDEX < <(
+				read -r OFFSET INDEX < <(
 					icotool --list "$TEMPFILE1" | awk '{
 						ci=int(substr($2,index($2,"=") + 1));
 						cw=int(substr($3,index($3,"=") + 1));
@@ -250,7 +250,7 @@ then
 				# Finally try to extract chosen icon:
 				icotool --extract --index=$INDEX "$TEMPFILE1" -o "$TEMPFILE2"
 
-				if [ -s $TEMPFILE2 ]
+				if [ -s "$TEMPFILE2" ]
 				then
 					ICON=$TEMPFILE2
 					[ "$RESIZE" ] && mogrify -resize 32x32 "$ICON"
@@ -298,7 +298,7 @@ fi
 # Create the basic thumbnail:
 if [ "$ICON" ]
 then
-	# Calculate the backgroud color:
+	# Calculate the background color:
 	COLOR=$(
 		convert "$ICON" -background white -flatten -fill white \
 		-fuzz 40% -opaque black -level 33%,66% -scale 1x1! "$TUNE" txt:- \
@@ -351,7 +351,7 @@ then
 		VERSION=$(
 			file "$INPUTFILE" \
 			| grep -o ', Subject: .*, Author: ' \
-			| egrep -o '[0-9]+\.[0-9]+(\.[0-9][0-9]?)?(beta)?' \
+			| grep -Eo '[0-9]+\.[0-9]+(\.[0-9][0-9]?)?(beta)?' \
 			| head -1
 		)
 	fi
