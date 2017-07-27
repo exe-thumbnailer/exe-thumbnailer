@@ -244,7 +244,7 @@ then
 				then
 					INDEX=1
 					RESIZE=yes
-					OFFSET=$(($OFFSET - 16))
+					OFFSET=$((OFFSET - 16))
 				fi
 
 				# Finally try to extract chosen icon:
@@ -321,7 +321,7 @@ else
 fi
 
 # Create the final thumbnail:
-OFFSET=$(($OFFSET + 8))
+OFFSET=$((OFFSET + 8))
 
 if [ "$SHORTCUT" ]
 then
