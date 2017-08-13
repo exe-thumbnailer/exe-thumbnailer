@@ -37,7 +37,7 @@ fi
 
 if ! TEMPDIR="$(mktemp -d)"
 then
-	echo "gnome-exe-thumbnailer: Failed to make a temporary folder, quitting..." && exit 1
+	echo "exe-thumbnailer: Failed to make a temporary folder, quitting..." && exit 1
 fi
 TEMPFILE1="$TEMPDIR/group_icon_res"
 TEMPFILE2="$TEMPDIR/extracted_icon.png"
@@ -215,7 +215,7 @@ fi
 if [[ ${INPUTFILE##*.} = 'msi' ]]
 then
 	# Use generic installer icon for a .msi package:
-	ICON=/usr/share/pixmaps/gnome-exe-thumbnailer/$THEME/installer.png
+	ICON=/usr/share/pixmaps/exe-thumbnailer/$THEME/installer.png
 	TUNE='-modulate 120,100,0'
 
 elif [ "$INPUTFILE_SIZE" -lt "$THUMBNAIL_LIMIT" ]
@@ -229,7 +229,7 @@ then
 	| grep "could not find \`1' in \`group_icon' resource"
 	then
 		# Use generic installer icon:
-		ICON=/usr/share/pixmaps/gnome-exe-thumbnailer/$THEME/installer.png
+		ICON=/usr/share/pixmaps/exe-thumbnailer/$THEME/installer.png
 		TUNE='-modulate 120'
 
 	else
@@ -347,14 +347,14 @@ if [ "$SHORTCUT" ]
 then
 	# Variant with MS shortcut emblem in bottom left corner for .lnk files
 	convert -size 48x48 xc:none -fill "$COLOR" -draw "$DRAW" "$TUNE_NX" miff:- \
-	| composite -compose multiply "/usr/share/pixmaps/gnome-exe-thumbnailer/$THEME/template.png" - miff:- \
+	| composite -compose multiply "/usr/share/pixmaps/exe-thumbnailer/$THEME/template.png" - miff:- \
 	| composite -geometry "+$OFFSET+$OFFSET" "$ICON" - png:- \
-	| composite -gravity southwest /usr/share/pixmaps/gnome-exe-thumbnailer/shortcut.png - "$TEMPTHUMB"
+	| composite -gravity southwest /usr/share/pixmaps/exe-thumbnailer/shortcut.png - "$TEMPTHUMB"
 
 else
 	# Plain variant
 	convert -size 48x48 xc:none -fill "$COLOR" -draw "$DRAW" "$TUNE_NX" miff:- \
-	| composite -compose multiply "/usr/share/pixmaps/gnome-exe-thumbnailer/$THEME/template.png" - png:- \
+	| composite -compose multiply "/usr/share/pixmaps/exe-thumbnailer/$THEME/template.png" - png:- \
 	| composite -geometry "+$OFFSET+$OFFSET" "$ICON" - "$TEMPTHUMB"
 
 fi
