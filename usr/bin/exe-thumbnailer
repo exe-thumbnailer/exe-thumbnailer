@@ -97,11 +97,6 @@ case "$THEME" in
 		DRAW='roundRectangle 2,2 45,45 3,3'
 	;;
 
-	elementary*|Ubuntu-Mono*|Humanity*)
-		THEME='elementary'
-		DRAW='roundRectangle 2,2 45,45 3,3'
-	;;
-
 	AwOken)
 		THEME='awoken'
 		DRAW='roundRectangle 3,3 44,44 3,3'
