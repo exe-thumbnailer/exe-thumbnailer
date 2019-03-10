@@ -109,8 +109,10 @@ then
 
 fi
 
-echo "$THUMBNAILS_PATH/*/$(echo -n "$3" | md5sum | cut -d' ' -f1).png" \
->> "$THUMBNAILS_PATH/gnome-exe-thumbnailer.files"
+if [[ ! -z "$3" ]]; then
+	echo "$THUMBNAILS_PATH/*/$(echo -n "$3" | md5sum | cut -d' ' -f1).png" \
+	>> "$THUMBNAILS_PATH/gnome-exe-thumbnailer.files"
+fi
 
 case "$THEME" in
 	Faience*)
