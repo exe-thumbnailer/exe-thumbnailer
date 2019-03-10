@@ -203,13 +203,9 @@ then
 fi
 
 INPUTFILE_SIZE=$(du -b "$INPUTFILE" | cut -f1 -d$'\t')
-# Try to fetch the max. size for thumbnailed executables from gsettings, but fall back to 10485760 bytes if that fails.
+# Try to fetch the max. size for thumbnailed executables from gsettings, but fall back to 10 MiB if that fails.
 THUMBNAIL_LIMIT=$(gsettings get org.gnome.nautilus.preferences thumbnail-limit 2>/dev/null | cut -f2 -d' ')
-
-if [[ ! "$THUMBNAIL_LIMIT" ]]
-then
-	THUMBNAIL_LIMIT=10485760
-fi
+THUMBNAIL_LIMIT=$((${THUMBNAIL_LIMIT:-10} * 1024 * 1024))
 
 
 if [[ ${INPUTFILE##*.} = 'msi' ]]
