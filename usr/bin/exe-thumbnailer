@@ -216,7 +216,7 @@ if [[ ${INPUTFILE##*.} = 'msi' ]]
 then
 	# Use generic installer icon for a .msi package:
 	ICON=/usr/share/pixmaps/exe-thumbnailer/$THEME/installer.png
-	TUNE='-modulate 120,100,0'
+	TUNE=('-modulate' '120,100,0')
 
 elif [ "$INPUTFILE_SIZE" -lt "$THUMBNAIL_LIMIT" ]
 then
@@ -230,7 +230,7 @@ then
 	then
 		# Use generic installer icon:
 		ICON=/usr/share/pixmaps/exe-thumbnailer/$THEME/installer.png
-		TUNE='-modulate 120'
+		TUNE=('-modulate' '120')
 
 	else
 		# Process extracted data, if we have some:
@@ -321,7 +321,7 @@ then
 	# Calculate the background color:
 	COLOR=$(
 		convert "$ICON" -background white -flatten -fill white \
-		-fuzz 40% -opaque black -level 33%,66% -scale 1x1! "$TUNE" txt:- \
+		-fuzz 40% -opaque black -level 33%,66% -scale 1x1! "${TUNE[@]}" txt:- \
 		| tail -1 \
 		| grep -o '#......'
 	)
@@ -346,14 +346,14 @@ OFFSET=$((OFFSET + 8))
 if [ "$SHORTCUT" ]
 then
 	# Variant with MS shortcut emblem in bottom left corner for .lnk files
-	convert -size 48x48 xc:none -fill "$COLOR" -draw "$DRAW" "$TUNE_NX" miff:- \
+	convert -size 48x48 xc:none -fill "$COLOR" -draw "$DRAW" miff:- \
 	| composite -compose multiply "/usr/share/pixmaps/exe-thumbnailer/$THEME/template.png" - miff:- \
 	| composite -geometry "+$OFFSET+$OFFSET" "$ICON" - png:- \
 	| composite -gravity southwest /usr/share/pixmaps/exe-thumbnailer/shortcut.png - "$TEMPTHUMB"
 
 else
 	# Plain variant
-	convert -size 48x48 xc:none -fill "$COLOR" -draw "$DRAW" "$TUNE_NX" miff:- \
+	convert -size 48x48 xc:none -fill "$COLOR" -draw "$DRAW" miff:- \
 	| composite -compose multiply "/usr/share/pixmaps/exe-thumbnailer/$THEME/template.png" - png:- \
 	| composite -geometry "+$OFFSET+$OFFSET" "$ICON" - "$TEMPTHUMB"
 
