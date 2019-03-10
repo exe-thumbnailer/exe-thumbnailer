@@ -12,6 +12,8 @@ print_usage() {
 	exit 0;
 }
 
+VERBOSE=false
+
 while getopts ":hvV" opt; do
   case $opt in
     h)
@@ -19,6 +21,7 @@ while getopts ":hvV" opt; do
 		;;
     v)
 		set -x
+		VERBOSE=true
 		;;
     V)
 		echo "exe-thumbnailer $SCRIPT_VERSION"; exit
@@ -34,9 +37,17 @@ shift $((OPTIND-1))
 INPUTFILE="$1"
 OUTPUTFILE="$2"
 
+debug_print() {
+	if [[ "$VERBOSE" == true ]]; then
+		echo "$@"
+	fi
+}
+
 if [[ -z "$2" ]]; then
 	print_usage
 fi
+
+debug_print "Got input $INPUTFILE, output $OUTPUTFILE"
 
 shopt -s nocasematch
 # application/x-ms-shortcut (.lnk) support.
@@ -44,7 +55,8 @@ shopt -s nocasematch
 # lnkinfo by James Lu
 if [[ ${INPUTFILE##*.} = 'lnk' ]]
 then
-	which winepath >&2 || exit 1
+	debug_print "Input is lnk file, trying to find target"
+	which winepath >&2 || (debug_print "winepath is needed to thumbnail .lnk files"; exit 1)
 
 	LNKINFO=$(lnkinfo "$INPUTFILE")
 
@@ -60,8 +72,9 @@ then
 	INPUTFILE="$(
 		winepath -u "$RELPATH"
 	)"
+	debug_print "LNK target found as $INPUTFILE"
 
-	[ ! "$INPUTFILE" ] && exit 1
+	[ ! "$INPUTFILE" ] && (debug_print "Unknown target $INPUTFILE, bailing"; exit 1)
 	SHORTCUT='TRUE'
 
 fi
@@ -70,6 +83,7 @@ if ! TEMPDIR="$(mktemp -d)"
 then
 	echo "exe-thumbnailer: Failed to make a temporary folder, quitting..." && exit 1
 fi
+debug_print "Using temp dir $TEMPDIR"
 TEMPFILE1="$TEMPDIR/group_icon_res"
 TEMPFILE2="$TEMPDIR/extracted_icon.png"
 TEMPTHUMB="$TEMPDIR/thumbnail.png"
@@ -106,12 +120,14 @@ then
 	rm "$(cat "$THUMBNAILS_PATH/gnome-exe-thumbnailer.files")"
 	true > "$THUMBNAILS_PATH/gnome-exe-thumbnailer.files"
 	echo "$THEME" > "$THUMBNAILS_PATH/gnome-exe-thumbnailer.cfg"
-
+	debug_print "Removing previously generated thumbnails due to theme change"
 fi
 
 if [[ ! -z "$3" ]]; then
 	echo "$THUMBNAILS_PATH/*/$(echo -n "$3" | md5sum | cut -d' ' -f1).png" \
 	>> "$THUMBNAILS_PATH/gnome-exe-thumbnailer.files"
+else
+	debug_print "Thumbnail URI not specified; skipping writing to cache"
 fi
 
 case "$THEME" in
@@ -227,6 +243,7 @@ esac
 # example, an .lnk pointing to a hard drive partition
 if [ ! -f "$INPUTFILE" ]
 then
+	debug_print "$INPUTFILE does not point to a file"
 	exit 1
 fi
 
@@ -238,6 +255,7 @@ THUMBNAIL_LIMIT=$((${THUMBNAIL_LIMIT:-10} * 1024 * 1024))
 
 if [[ ${INPUTFILE##*.} = 'msi' ]]
 then
+	debug_print "$INPUTFILE is a .msi, using generic installer image"
 	# Use generic installer icon for a .msi package:
 	ICON=/usr/share/pixmaps/exe-thumbnailer/$THEME/installer.png
 	TUNE=('-modulate' '120,100,0')
@@ -253,6 +271,7 @@ then
 	| grep "could not find \`1' in \`group_icon' resource"
 	then
 		# Use generic installer icon:
+		debug_print "$INPUTFILE is an installer, using generic installer image"
 		ICON=/usr/share/pixmaps/exe-thumbnailer/$THEME/installer.png
 		TUNE=('-modulate' '120')
 
@@ -360,6 +379,7 @@ else
 	# relaxed in the amount of colours they use.
 	# (Also, repeating the first two letters of the filename as a label is largely meaningless to
 	# end users.)
+	debug_print "no icon found for $INPUTFILE"
 	exit 1
 
 fi
@@ -435,3 +455,4 @@ else
 fi
 
 rm -r "$TEMPDIR"
+debug_print "OK wrote to $OUTPUTFILE"
