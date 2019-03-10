@@ -1,13 +1,44 @@
 #!/bin/bash
 
-shopt -s nocasematch
+SCRIPT_VERSION="0.10.1-dev"
 
-# Uncomment this line to enable verbose/debug logging
-#set -x
+print_usage() {
+	echo "exe-thumbnailer $SCRIPT_VERSION - Windows executable thumbnailer for Linux"
+	echo
+	echo "Usage: $0 [-h] [-v] INPUTFILE OUTPUTFILE [<THUMBNAIL CACHE NAME>] [<ICON THEME>]";
+	echo "	-h: show this help message and exit"
+	echo "	-v: enables debug mode"
+	echo "	-V: print version information and exit"
+	exit 0;
+}
+
+while getopts ":hvV" opt; do
+  case $opt in
+    h)
+		print_usage
+		;;
+    v)
+		set -x
+		;;
+    V)
+		echo "exe-thumbnailer $SCRIPT_VERSION"; exit
+		;;
+    \?)
+		echo "Unknown option: -$OPTARG" >&2
+		;;
+  esac
+done
+
+shift $((OPTIND-1))
 
 INPUTFILE="$1"
 OUTPUTFILE="$2"
 
+if [[ -z "$2" ]]; then
+	print_usage
+fi
+
+shopt -s nocasematch
 # application/x-ms-shortcut (.lnk) support.
 # Original version by jopka (https://launchpad.net/~jopka), modified to use
 # lnkinfo by James Lu
