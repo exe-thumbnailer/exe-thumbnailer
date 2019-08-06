@@ -1,3 +1,10 @@
+## exe-thumbnailer 0.10.1
+
+- Fix calculations of Nautilus thumbnail-limit on GNOME 3.26 and later: the dconf option now uses mebibytes (MiB) instead of bytes. [pr#14](https://github.com/exe-thumbnailer/exe-thumbnailer/pull/14)
+- Added a proper command line interface (help, version, verbose mode). [issue#11](https://github.com/exe-thumbnailer/exe-thumbnailer/issues/11)
+- Fix hang if no input file is given on the command line. [pr#15](https://github.com/exe-thumbnailer/exe-thumbnailer/pull/15)
+- Suppress warnings on checking thumbnail-limit if Nautilus is not installed. [issue#8](https://github.com/exe-thumbnailer/exe-thumbnailer/issues/8)
+
 ## exe-thumbnailer 0.10.0
 
 - gnome-exe-thumbnailer is now exe-thumbnailer (this project is unaffiliated with GNOME and has supported other desktops for quite a while now.)

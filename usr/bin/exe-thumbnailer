@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPT_VERSION="0.10.1-dev"
+SCRIPT_VERSION="0.10.1"
 
 print_usage() {
 	echo "exe-thumbnailer $SCRIPT_VERSION - Windows executable thumbnailer for Linux"
